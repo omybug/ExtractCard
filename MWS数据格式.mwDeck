@@ -1,0 +1,61 @@
+// Deck file for Magic Workstation (http://www.magicworkstation.com)
+
+// Spells
+    1 [SGZ] CY169 鱼鳞阵
+    9 [SGZ] YW169 选弓步兵
+    4 [SGZ] WL175 扩槽步兵
+    3 [SGZ] CS191 基础弓兵
+    1 [SGZ] CS190 虎符步兵
+    1 [SGZ] WL154 韬韫发冠
+    1 [SGZ] YW166 先锋令
+    1 [SGZ] YW165 遣军印
+    1 [SGZ] YW154 毙而再起
+    1 [SGZ] WL150 止戈去议
+    1 [SGZ] WL136 恃强凌弱
+    1 [SGZ] CY003 乐进
+    1 [SGZ] LH032 陈群
+    1 [SGZ] WL041 蒋钦
+    1 [SGZ] LH095 董和
+    1 [SGZ] LH033 徐庶
+    1 [SGZ] WL073 刘磐
+    1 [SGZ] LH010 李通
+    1 [SGZ] CY086 金旋
+    1 [SGZ] CY064 刘度
+    1 [SGZ] CY045 宋谦
+    1 [SGZ] CY044 贾华
+    1 [SGZ] CY039 周泰
+    1 [SGZ] WL129 运智铺谋
+    1 [SGZ] WL115 前仆后继
+    1 [SGZ] LH153 同气共类
+    1 [SGZ] JZ131 权时制宜
+    1 [SGZ] HX038 巫蛊之术
+    1 [SGZ] WL085 蒯越
+    1 [SGZ] YW009 沮鹄
+    1 [SGZ] WL042 孙暠
+    1 [SGZ] CY143 螫手解腕
+    1 [SGZ] CS155 整旅厉卒
+    1 [SGZ] CS165 受制于人
+    1 [SGZ] CS152 整军经武
+    1 [SGZ] WL109 北辰星拱
+    1 [SGZ] LH126 运筹决策
+    1 [SGZ] CY119 兔死狗烹
+    1 [SGZ] CY013 司马懿
+    1 [SGZ] CY009 田豫
+
+// Sideboard
+SB: 1 [SGZ] LH124 连衽成帷
+SB: 1 [SGZ] CY136 偷梁换柱
+SB: 1 [SGZ] WL149 杀家纾难
+SB: 1 [SGZ] CS180 遗计定辽东
+SB: 1 [SGZ] WL142 一口所敌
+SB: 1 [SGZ] JZ135 摧锋陷阵
+SB: 1 [SGZ] JZ054 吉平
+SB: 1 [SGZ] HX026 挂牌免战
+SB: 1 [SGZ] CY134 天变-梅雨
+SB: 1 [SGZ] YW155 闻风而遁
+SB: 1 [SGZ] LH127 根株牵连
+SB: 1 [SGZ] CS162 不测之忧
+SB: 1 [SGZ] HX041 隔岸观火
+SB: 1 [SGZ] HX039 有来无回
+SB: 1 [SGZ] CY113 以身试法
+SB: 1 [SGZ] HX036 玉石俱焚

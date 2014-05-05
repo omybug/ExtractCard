@@ -1,0 +1,29 @@
+body {
+        padding-top: 60px;
+}
+
+#all_card_wrapper div{
+	border:solid 1px #CFCFCF;
+}
+
+.card_item {
+	border:solid 1px #96CDCD;
+	text-align:center;
+	width: 84px;
+	margin: 2px;
+}
+
+.wcard{
+}
+.bcard{
+	background-color: #5CACEE
+}
+.pcard{
+	background-color: #68228B
+}
+.gcard{
+	background-color: #458B00
+}
+.ocard{
+	background-color: #EE9A00
+}

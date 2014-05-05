@@ -1,0 +1,13 @@
+{
+  "name": "ExtractCard",
+  "version": "1.0.0",
+  "description": "A simple extract card soft",
+  "main": "server.js",
+  "repository": "",
+  "author": "omybug@163.com",
+  "dependencies": {
+    "async": "~0.2.8",
+    "express": "~3.2.4",
+    "socket.io": "~0.9.14"
+  }
+}
