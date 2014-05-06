@@ -50,6 +50,8 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
       socket.get('name', function (err, name){
         users.splice(users.indexOf(name), 1);
+        chooseUsers.splice(chooseUsers.indexOf(name), 1);
+        groups = [];
       });
       sockets.splice(sockets.indexOf(socket), 1);
       if(1 == sockets.length){
@@ -84,7 +86,7 @@ io.on('connection', function (socket) {
           name: '系统提示',
           text: '账号"'+name+'"已存在！请刷新界面重新登录。'
         };
-        socket.emit(message, data);
+        socket.emit('message', data);
       }else{
         users.push(name);
         socket.set('name', String(name || 'Anonymous'), login);
@@ -99,7 +101,12 @@ io.on('connection', function (socket) {
     socket.on('start', function(group_id){
       socket.get('name', function(err,name){
         debug(group_id);
-        start(name, socket.groups[group_id]);
+        if(socket.groups[group_id]){
+          broadcast('start', name);
+          start(name, socket.groups[group_id]);
+          //删除轮抽过的卡组
+          socket.groups.splice(group_id, 1);
+        }
       });
     });
 
@@ -111,9 +118,15 @@ io.on('connection', function (socket) {
     socket.on('openBox', function(){
       socket.get('name', function(err,name){
         //开1盒，也就是10包.
-        var cg = socket.factory.create();
-        socket.groups.push(cg);
-        socket.emit('openBox', cg);
+        var b = [];
+        for(var i = 0 ; i < 10 ; i++){
+          b[i] = socket.factory.create();
+        }
+        b.sort(function(){ return 0.5 - Math.random()});
+        for(var i = 0 ; i < 10 ; i++){
+          socket.groups.push(b[i]);
+        }
+        socket.emit('openBox', b);
       });
     });
 
@@ -157,6 +170,7 @@ function start(name, card_group){
     chooseUsers.push(name);
   for(var i = 0 ; i < users.length; i++){
     if(users[i] == name){
+      debug( ' ---start---- ' + i + name + card_group);
       groups[i] = card_group
     }
   }
@@ -164,12 +178,13 @@ function start(name, card_group){
     return;
   chooseUsers = [];
   roundIndex = 0;
-  sockets.forEach(function(socket){
-    var index = sockets.indexOf(socket);
-    var groupIndex = (parseInt(roundIndex)+index) % users.length;
+  for(var i = 0 ; i < sockets.length ; i++){
+    var socket = sockets[i];
+    var groupIndex = (parseInt(roundIndex)+i) % users.length;
+    debug('---emit---' + groupIndex + ' ' + groups[groupIndex])
     socket.emit('group_cards', groups[groupIndex]);
     socket.emit('round',null);
-  });
+  }
 }
 
 function nextRound(name){
@@ -184,13 +199,13 @@ function nextRound(name){
     chooseUsers = [];
     roundIndex = (parseInt(roundIndex)+1) % users.length;
     debug('*** roundIndex : ' + roundIndex + ' ***');
-    sockets.forEach(function(socket){
-      var index = sockets.indexOf(socket);
-      var groupIndex = (parseInt(roundIndex)+index) % users.length;
-      debug('*** groupIndex:' + groupIndex + ' ***');
+    for(var i = 0 ; i < sockets.length ; i++){
+      socket = sockets[i];
+      var groupIndex = (parseInt(roundIndex)+i) % users.length;
+      debug('*** groupIndex:' + groupIndex  + ' user:' + name + ' ***');
       socket.emit('group_cards', groups[groupIndex]);
       socket.emit('round',null);
-    });
+    }
   }
 }
 

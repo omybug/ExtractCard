@@ -1,17 +1,18 @@
+var ip = '192.168.1.102:80';
 function ExtractCard(connect){
   this.user       = {};
   this.users      = [];
   this.myCards    = [];
   this.connect    = connect;
-  this.boxes       = [];
+  this.boxes      = [];
+  this.debug      = false;
   this.login = function(){
-    this.user.ip   = $('#ip_address').val();
     this.user.name = $('#account').val();
-    if(!this.user.ip || !this.user.name){
-      alert('请正确填写IP和账号');
+    if(!this.user.name){
+      alert('请正确填写账号');
       return;
     }
-    this.connect.connect(this.user.ip, this.user.name);
+    this.connect.connect(ip, this.user.name);
     $('#myModal').modal('hide');
   };
   this.showLoginDialog = function(){
@@ -22,23 +23,27 @@ function ExtractCard(connect){
     $('#msg').val('');
   };
   this.openBox = function(data){
-    this.boxes.push(data);
+    for(var i = 0 ; i < data.length ; i++){
+      this.boxes.push(data[i]);
+    }
     $('#box_list').html('');
     for(var i in this.boxes){
       var box = this.boxes[i];
       var style = "wcard";
       var card_content = '';
-      for(var j in box){
-        var card = box[j];
-        card_content = card_content + card.name+";";
-        if(card.rarity == '蓝'){
-          style = "bcard";
-        }
-        if(card.rarity == '紫'){
-          style = "pcard";
-        }
-        if(card.rarity == '橙'){
-          style = "ocard";
+      if(this.debug){
+        for(var j in box){
+          var card = box[j];
+          card_content = card_content + card.name+";";
+          if(card.rarity == '蓝'){
+            style = "bcard";
+          }
+          if(card.rarity == '紫'){
+            style = "pcard";
+          }
+          if(card.rarity == '橙'){
+            style = "ocard";
+          }
         }
       }
       $('#box_list').append('<a rel="tooltip" href="#" data-toggle="tooltip" title data-original-title="'+card_content+'" class="card_item '+style+'" style="float:left;width:46px;">' + i + '</a>');
@@ -67,6 +72,12 @@ function ExtractCard(connect){
     }
   };
   this.showChoosedCard = function(name,card){
+    for(var i in this.users){
+      if(this.users[i].name == name){
+        this.users[i].isChoosed = true;
+      }
+      this.drawUserList();
+    }
     if(this.user.name != name)
       return;
     $('#my_cards').append('<div class="span1 card_item" onmouseover="extractCard.showCardPic(\''+card.id+' '+card.name+'\')">'+card.name+'</div>');
@@ -87,36 +98,34 @@ function ExtractCard(connect){
     }
     this.message(msg);
   };
-  this.showCardPic = function(card_id){
-    $('#card_image').attr('src','./img/cards/'+card_id+'.jpg');
+  this.showCardPic = function(cardPic){
+    $('#card_image').attr('src','./img/cards/'+cardPic+'.jpg');
   };
   this.draw = function(){
     $('#export').html('');
     for(var i in this.myCards){
       //1 [SGZ] CY169 鱼鳞阵
       var card = this.myCards[i];
-      var content = '<div onmouseover="showCard(\''+card.id+'\')">&nbsp;&nbsp;&nbsp;&nbsp;' + card.amount + ' [SGZ] ' + card.id + ' '  + card.name + '</div>';
+      var content = '<div onmouseover="extractCard.showCardPic(\'' + card.id + ' ' + card.name + '\')">&nbsp;&nbsp;&nbsp;&nbsp;' + card.amount + ' [SGZ] ' + card.id + ' '  + card.name + '</div>';
       $('#export').append(content);
     }
   };
   this.roster = function(users){
     $('#user_list').html('');
-    for(var i in users){
-      var u = users[i];
-      if(u.name != this.user.name){
-        this.users.push(u);
-      }
-      if(u.isMaster){
-        $('#user_list').append('<li id="name_'+u.name+'">' + u.name + ' 房主</li>');
+    this.users = users;
+    this.drawUserList();
+  };
+  this.drawUserList = function(){
+    $('#user_list').html('');
+    for(var i in this.users){
+      var u = this.users[i];
+      if(u.isChoosed){
+        $('#user_list').append('<li id="name_' + u.name+'">' + u.name + ' 已选</li>');
       }else{
-        if(u.isReady){
-          $('#user_list').append('<li id="name_' + u.name+'">' + u.name + ' ready</li>');
-        }else{
-          $('#user_list').append('<li id="name_' + u.name+'">' + u.name + '</li>');
-        }
+        $('#user_list').append('<li id="name_' + u.name+'">' + u.name + '</li>');
       }
     }
-  };
+  }
   this.selecteCard = function(card_id, card_name){
     this.user.selectedCardID = card_id;
     $('#selected_card').val(card_name);
@@ -135,19 +144,21 @@ function ExtractCard(connect){
       var box = this.boxes[i];
       var style = "wcard";
       var card_content = '';
-      //for(var j in box){
-      //   var card = box[j];
-      //   card_content = card_content + card.name+";";
-      //   if(card.rarity == '蓝'){
-      //     style = "bcard";
-      //   }
-      //   if(card.rarity == '紫'){
-      //     style = "pcard";
-      //   }
-      //   if(card.rarity == '橙'){
-      //     style = "ocard";
-      //   }
-      // }
+      if(this.debug){
+        for(var j in box){
+          var card = box[j];
+          card_content = card_content + card.name+";";
+          if(card.rarity == '蓝'){
+            style = "bcard";
+          }
+          if(card.rarity == '紫'){
+            style = "pcard";
+          }
+          if(card.rarity == '橙'){
+            style = "ocard";
+          }
+        }
+      }
       // $('#chooseCardGroup .modal-body').append('<a rel="tooltip" href="#" onclick="selectedCardGroup(' + i + ')" data-toggle="tooltip" title data-original-title="'+card_content+'" class="card_item '+style+'" style="float:left;width:46px;">' + i + '</a>');
       $('#chooseCardGroup .modal-body').append('<a rel="tooltip" href="#" onclick="extractCard.selectedCardGroup(' + i + ')" data-toggle="tooltip" class="card_item '+style+'" style="float:left;width:46px;">' + i + '</a>');
     }
@@ -168,15 +179,20 @@ function ExtractCard(connect){
     this.connect.start(cardGroupId);
     $('#chooseCardGroup').modal('hide');
   };
-  this.ready = function(user){
-    debug(this.user.name + ' is ' + this.user.isReady);
-    $('#name_'+this.user.name).html(this.user.name + ' ready');
+  this.start = function(name){
+    $('#name_'+ name).html(name + ' 准备');
   };
   this.message = function(msg){
     var content ='<tr><td class="span2">'+msg.name+'</td><td class="span7">'+msg.text+'</td></tr>';
     $('#msg_list').append(content);
     var scrollTop = $("#msg_list_wrapper")[0].scrollHeight;
     $("#msg_list_wrapper").scrollTop(scrollTop);
+  };
+  this.round = function(){
+    for(var i in this.users){
+      this.users[i].isChoosed = false;
+    }
+    this.drawUserList();
   };
 }
 
@@ -202,8 +218,8 @@ var connect = {
     socket.on('roster', function (users) {
       extractCard.roster(users);
     });
-    socket.on('ready', function(user){
-      extractCard.ready(user);
+    socket.on('start', function(name){
+      extractCard.start(name);
     });
     socket.on('group_cards', function(data){
       extractCard.showCards(data);
@@ -212,6 +228,8 @@ var connect = {
       extractCard.showChoosedCard(data.name, data.card);
     });
     socket.on('round', function(){
+      debug('round');
+      extractCard.round();
       $('#selected_card').val('');
       $('#bt_choose').prop('disabled', false);
     });
@@ -221,9 +239,6 @@ var connect = {
   },
   send : function(msg){
     socket.emit('message', msg);
-  },
-  ready: function(){
-    socket.emit('ready', true);
   },
   start: function(group_id){
     socket.emit('start', group_id);

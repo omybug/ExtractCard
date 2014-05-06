@@ -1,18 +1,20 @@
 windows环境下请先安装node-v0.10.26-x86.msi 请到http://nodejs.org/下载并安装
 安装完成之后，运行start.bat
 
-
 使用注意，
 1.开包数据在node_modules\data\groups.js下面修改，请安格式填写,
 2.所有卡包图片请放大client\img\cards下面，groups.js中ID就是图片的名字，统一以.jpg结尾，不然图片显示不出来。
 3.所用玩家都在线了，在点开始，不能中途加入。
 4.抽卡过程中，所有在线玩家都点开始，就会更换卡组。
-5.服务默认端口是80，一般情况下如果start.bat闪退，说明发生冲突了，请修改server.js 227行代码，把80改为其他端口即可，
+5.服务默认端口是80，一般情况下如果start.bat闪退，说明发生冲突了，请修改server.js 227行代码，把80改为其他端口即可，同时修改ExtractCard/client/js/index.js 第一行ip的值，格式：服务端IP地址:端口  例如 192.168.1.100:80
 
+v1.0.4
+1.fix some bug.
+2.change open bag to open one box.
+3.add player status like ready, choosed.
 
 v1.0.3
 1.refactor the code.
-2.
 
 v1.0.2
 1.Add TJ cards data.
